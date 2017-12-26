@@ -11,6 +11,7 @@ gem "sqlite3", "~> 1.3.13"
 gem "turbolinks", "~> 5"
 gem "tzinfo-data", "~> 1.2017.3"
 gem "uglifier", ">= 1.3.0"
+gem "webpacker"
 
 group :development, :test do
   gem "pry-byebug", "~> 3.5.1"
