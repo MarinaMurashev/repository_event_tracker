@@ -10,6 +10,8 @@ const App = (props) => (
     <div>
       <Route
         path="/"
+        defaultUser={props.defaultUser}
+        defaultRepoName={props.defaultRepoName}
         render={(routeProps) => <RepoEventsDisplay {...props} {...routeProps} />}
       />
     </div>

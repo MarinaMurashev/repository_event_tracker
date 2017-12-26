@@ -9,8 +9,8 @@ class RepoEventsDisplay extends React.Component {
     };
   }
 
-  fetchEvents () {
-    axios.get(`api/v1/repo_events`)
+  fetchEvents (user, repoName) {
+    axios.get(`api/v1/repo_events?user=${user}&repo_name=${repoName}`)
       .then(response => {
         this.setState({ events: response.data });
       })
@@ -19,19 +19,34 @@ class RepoEventsDisplay extends React.Component {
       });
   }
 
+  setUser () {
+    this.setState({ user: this.props.defaultUser });
+  }
+
+  setRepoName () {
+    this.setState({ repoName: this.props.defaultRepoName });
+  }
+
   componentDidMount () {
-    this.fetchEvents();
+    this.setUser();
+    this.setRepoName();
+    this.fetchEvents(this.props.defaultUser, this.props.defaultRepoName);
   }
 
   componentWillReceiveProps (nextProps) {
-    this.fetchEvents();
+    this.setUser();
+    this.setRepoName();
+    this.fetchEvents(this.props.defaultUser, this.props.defaultRepoName);
   }
 
   render () {
     const events = this.state.events
+    const user = this.state.user
+    const repoName = this.state.repoName
 
     return (
       <div>
+        <div>{`User: ${user}, Repo Name: ${repoName}`}</div>
         {
           events.map((event, i) => {
             return (
