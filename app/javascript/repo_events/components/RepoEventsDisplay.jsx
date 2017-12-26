@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Event from "./Event"
 
 class RepoEventsDisplay extends React.Component {
   constructor () {
@@ -49,9 +50,7 @@ class RepoEventsDisplay extends React.Component {
         <div>{`User: ${user}, Repo Name: ${repoName}`}</div>
         {
           events.map((event, i) => {
-            return (
-              <p>{event && `${event.id}`}</p>
-            )
+            return ( <Event event={event} /> )
           })
         }
       </div>
