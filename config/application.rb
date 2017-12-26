@@ -14,5 +14,7 @@ module RepositoryEventTracker
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+
+    config.autoload_paths += Dir["#{config.root}/app/clients/*.rb"].each{ |file| require file }
   end
 end
