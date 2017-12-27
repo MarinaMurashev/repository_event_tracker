@@ -16,26 +16,6 @@ describe Clients::Github, ".fetch_events" do
     expect(result).to eq(response_body)
   end
 
-  it "defaults page parameter to 1 when it is not provided" do
-    stub_request(:get, request_url).
-      with(query: { page: 1 }).
-      to_return(status: 200, body: response_body.to_json)
-
-    result = described_class.fetch_events(user: user, repo_name: repo_name)
-
-    expect(result).to eq(response_body)
-  end
-
-  it "passes provided page parameter as part of the request" do
-    stub_request(:get, request_url).
-      with(query: { page: 2 }).
-      to_return(status: 200, body: response_body.to_json)
-
-    result = described_class.fetch_events(user: user, repo_name: repo_name, page: 2)
-
-    expect(result).to eq(response_body)
-  end
-
   it "raises an error when request is not successful" do
     error_response_body = { "message" => "not found" }
     stub_request(:get, request_url).
@@ -45,5 +25,26 @@ describe Clients::Github, ".fetch_events" do
     expect {
       described_class.fetch_events(user: user, repo_name: repo_name)
     }.to raise_error(Clients::Github::ResponseError, "not found")
+  end
+
+  context "multi-page response" do
+    it "makes subsequent requests to fetch all results if link headers provided" do
+      next_link = "https://api.github.com/repositories/15435/events?page=2"
+      last_link = "https://api.github.com/repositories/15435/events?page=3"
+      link_header = "<#{next_link}>; rel=\"next\", <#{last_link}>; rel=\"last\""
+      stub_request(:get, request_url).
+        # with(query: hash_including({})).
+        to_return(status: 200, body: [{"a" => "b"}].to_json, headers: {"Link" => link_header})
+      stub_request(:get, next_link).
+        # with(query: hash_including({})).
+        to_return(status: 200, body: [{"b" => "c"}].to_json, headers: {"Link" => link_header})
+      stub_request(:get, last_link).
+        # with(query: hash_including({})).
+        to_return(status: 200, body: [{"c" => "d"}].to_json)
+
+      result = described_class.fetch_events(user: user, repo_name: repo_name)
+
+      expect(result).to eq([{ "a" => "b" }, { "b" => "c" }, { "c" => "d" }])
+    end
   end
 end
