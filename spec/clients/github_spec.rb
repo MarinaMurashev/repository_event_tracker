@@ -28,19 +28,21 @@ describe Clients::Github, ".fetch_events" do
   end
 
   context "multi-page response" do
+    let(:base_link) { "https://api.github.com/repositories/15435/events" }
+
     it "makes subsequent requests to fetch all results if link headers provided" do
-      next_link = "https://api.github.com/repositories/15435/events?page=2"
-      last_link = "https://api.github.com/repositories/15435/events?page=3"
-      link_header = "<#{next_link}>; rel=\"next\", <#{last_link}>; rel=\"last\""
+      first_link = "#{base_link}?page=2"
+      next_link = "#{base_link}?page=2"
+      last_link = "#{base_link}?page=3"
+      initial_link_header = "<#{next_link}>; rel=\"next\", <#{last_link}>; rel=\"last\""
+      intermediate_link_header = "<#{next_link}>; rel=\"next\", <#{last_link}>; rel=\"last\", <#{first_link}>; rel=\"prev\", <#{first_link}>; rel=\"first\""
+      last_link_header = "<#{first_link}>; rel=\"first\", <#{next_link}>; rel=\"prev\""
       stub_request(:get, request_url).
-        # with(query: hash_including({})).
-        to_return(status: 200, body: [{"a" => "b"}].to_json, headers: {"Link" => link_header})
+        to_return(status: 200, body: [{"a" => "b"}].to_json, headers: { "Link" => initial_link_header })
       stub_request(:get, next_link).
-        # with(query: hash_including({})).
-        to_return(status: 200, body: [{"b" => "c"}].to_json, headers: {"Link" => link_header})
+        to_return(status: 200, body: [{"b" => "c"}].to_json, headers: { "Link" => intermediate_link_header })
       stub_request(:get, last_link).
-        # with(query: hash_including({})).
-        to_return(status: 200, body: [{"c" => "d"}].to_json)
+        to_return(status: 200, body: [{"c" => "d"}].to_json, headers: { "Link" => last_link_header })
 
       result = described_class.fetch_events(user: user, repo_name: repo_name)
 
