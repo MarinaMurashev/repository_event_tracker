@@ -1,16 +1,17 @@
 module EventFetchers
   class Github
-    def self.fetch(user:, repo_name:)
-      new(user: user, repo_name: repo_name).fetch
+    def self.fetch(user:, repo_name:, event_type: nil)
+      new(user: user, repo_name: repo_name, event_type: event_type).fetch
     end
 
-    def initialize(user:, repo_name:)
+    def initialize(user:, repo_name:, event_type: nil)
       @user = user
       @repo_name = repo_name
+      @event_type = event_type
     end
 
     def fetch
-      event_results
+      event_type.blank? ? event_results : filtered_event_results_by_event_type
     end
 
     private
@@ -19,6 +20,10 @@ module EventFetchers
       @event_results ||= Clients::Github.fetch_events(user: user, repo_name: repo_name)
     end
 
-    attr_reader :user, :repo_name
+    def filtered_event_results_by_event_type
+      event_results.select { |event| event["type"] == event_type }
+    end
+
+    attr_reader :user, :repo_name, :event_type
   end
 end

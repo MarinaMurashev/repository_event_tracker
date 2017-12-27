@@ -17,5 +17,6 @@ module RepositoryEventTracker
 
     config.autoload_paths += Dir["#{config.root}/app/clients/*.rb"].each{ |file| require file }
     config.autoload_paths += Dir["#{config.root}/app/services/**/*.rb"].each{ |file| require file }
+    config.autoload_paths += Dir["#{config.root}/app/policies/**/*.rb"].each{ |file| require file }
   end
 end
