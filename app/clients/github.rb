@@ -35,7 +35,7 @@ module Clients
       next_page_link = second_page_link
       (2..last_page).each do |page|
         link = page == last_page ? last_page_link : next_page_link
-        next_response = connection.get(link)
+        next_response = connection.get(next_page_link)
 
         handle_response(next_response)
 

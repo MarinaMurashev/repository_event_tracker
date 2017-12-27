@@ -6,7 +6,9 @@ class RepoEventsDisplay extends React.Component {
   constructor () {
     super();
     this.state = {
-      events: []
+      events: [],
+      user: '',
+      repoName: ''
     };
   }
 
@@ -34,10 +36,20 @@ class RepoEventsDisplay extends React.Component {
     this.fetchEvents(this.props.defaultUser, this.props.defaultRepoName);
   }
 
-  componentWillReceiveProps (nextProps) {
-    this.setUser();
-    this.setRepoName();
-    this.fetchEvents(this.props.defaultUser, this.props.defaultRepoName);
+  handleChange (e) {
+    let newState = {};
+
+    newState[e.target.name] = e.target.value;
+
+    this.setState(newState);
+  }
+
+  handleSubmit (e, message) {
+    e.preventDefault();
+
+    let user = this.state.user;
+    let repoName = this.state.repoName;
+    this.fetchEvents(user, repoName);
   }
 
   render () {
@@ -47,6 +59,19 @@ class RepoEventsDisplay extends React.Component {
 
     return (
       <div>
+        <form className='react-form' onSubmit={this.handleSubmit.bind(this)}>
+          <fieldset className='form-group'>
+           <input id='formUser' className='form-input' name='user' type='text' required onChange={this.handleChange.bind(this)} />
+          </fieldset>
+
+          <fieldset className='form-group'>
+           <input id='formRepoName' className='form-input' name='repoName' type='text' required onChange={this.handleChange.bind(this)}  />
+          </fieldset>
+
+          <div className='form-group'>
+           <input id='formButton' className='btn' type='submit' placeholder='Fetch Events' />
+          </div>
+        </form>
         <div>{`User: ${user}, Repo Name: ${repoName}`}</div>
         {
           events.map((event, i) => {
