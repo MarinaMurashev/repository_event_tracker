@@ -11,7 +11,7 @@ gem "sqlite3", "~> 1.3.13"
 gem "turbolinks", "~> 5"
 gem "tzinfo-data", "~> 1.2017.3"
 gem "uglifier", ">= 1.3.0"
-gem "webpacker"
+gem "webpacker", "~> 3.2.0"
 
 group :development, :test do
   gem "pry-byebug", "~> 3.5.1"
@@ -26,6 +26,7 @@ end
 
 group :test do
   gem "rspec-rails", "~> 3.7.2"
+  gem "timecop", "~> 0.9.1"
   gem "webmock", "~> 3.1.1"
 end
 
