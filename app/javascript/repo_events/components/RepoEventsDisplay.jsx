@@ -8,14 +8,15 @@ class RepoEventsDisplay extends React.Component {
     this.state = {
       events: [],
       user: '',
-      repoName: ''
+      repoName: '',
+      eventType: ''
     };
   }
 
-  fetchEvents (user, repoName) {
-    axios.get(`api/v1/repo_events?user=${user}&repo_name=${repoName}`)
+  fetchEvents (user, repoName, eventType) {
+    axios.get(`api/v1/repo_events?user=${user}&repo_name=${repoName}&event_type=${eventType || ''}`)
       .then(response => {
-        this.setState({ user: user, repoName: repoName, events: response.data });
+        this.setState({ user: user, repoName: repoName, eventType: eventType, events: response.data });
       })
       .catch(error => {
         console.error(error);
@@ -23,12 +24,20 @@ class RepoEventsDisplay extends React.Component {
   }
 
   componentDidMount () {
-    this.setState({ repoName: this.props.defaultRepoName, user: this.props.defaultUser });
+    this.setState({
+      repoName: this.props.defaultRepoName,
+      user: this.props.defaultUser,
+    });
     this.fetchEvents(this.props.defaultUser, this.props.defaultRepoName);
   }
 
   handleChange (e) {
-    let newState = { events: this.state.events, user: this.state.user, repoName: this.state.repoName };
+    let newState = {
+      events: this.state.events,
+      user: this.state.user,
+      repoName: this.state.repoName,
+      eventType: this.state.eventType
+    };
 
     newState[e.target.name] = e.target.value;
 
@@ -40,13 +49,15 @@ class RepoEventsDisplay extends React.Component {
 
     let user = this.state.user;
     let repoName = this.state.repoName;
-    this.fetchEvents(user, repoName);
+    let eventType = this.state.eventType;
+    this.fetchEvents(user, repoName, eventType);
   }
 
   render () {
     const events = this.state.events
     const user = this.state.user
     const repoName = this.state.repoName
+    const eventType = this.state.eventType
 
     return (
       <div>
@@ -59,11 +70,15 @@ class RepoEventsDisplay extends React.Component {
            <input id='formRepoName' className='form-input' name='repoName' type='text' required onChange={this.handleChange.bind(this)}  />
           </fieldset>
 
+          <fieldset className='form-group'>
+           <input id='formRepoName' className='form-input' name='eventType' type='text' onChange={this.handleChange.bind(this)}  />
+          </fieldset>
+
           <div className='form-group'>
            <input id='formButton' className='btn' type='submit' placeholder='Fetch Events' />
           </div>
         </form>
-        <div>{`User: ${user}, Repo Name: ${repoName}`}</div>
+        <div>{`User: ${user}, Repo Name: ${repoName}, Event Type: ${eventType || 'all'}`}</div>
         {
           events.map((event, i) => {
             return ( <Event event={event} /> )
