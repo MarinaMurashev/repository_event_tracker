@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
-import Event from "./Event"
+import { Form, FormGroup, ControlLabel, FormControl, Button } from "react-bootstrap";
+import Events from "./Events"
 
 class RepoEventsDisplay extends React.Component {
   constructor () {
@@ -61,29 +62,25 @@ class RepoEventsDisplay extends React.Component {
 
     return (
       <div>
-        <form className='react-form' onSubmit={this.handleSubmit.bind(this)}>
-          <fieldset className='form-group'>
-           <input id='formUser' className='form-input' name='user' type='text' required onChange={this.handleChange.bind(this)} />
-          </fieldset>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          <FormGroup>
+            <ControlLabel>User</ControlLabel>
+            <FormControl type="text" name="user" placeholder={user} onChange={this.handleChange.bind(this)} />
+          </FormGroup>
 
-          <fieldset className='form-group'>
-           <input id='formRepoName' className='form-input' name='repoName' type='text' required onChange={this.handleChange.bind(this)}  />
-          </fieldset>
+          <FormGroup>
+            <ControlLabel>Repo Name</ControlLabel>
+            <FormControl type="text" name="repoName" placeholder={repoName} onChange={this.handleChange.bind(this)} />
+          </FormGroup>
 
-          <fieldset className='form-group'>
-           <input id='formRepoName' className='form-input' name='eventType' type='text' onChange={this.handleChange.bind(this)}  />
-          </fieldset>
-
-          <div className='form-group'>
-           <input id='formButton' className='btn' type='submit' placeholder='Fetch Events' />
-          </div>
-        </form>
-        <div>{`User: ${user}, Repo Name: ${repoName}, Event Type: ${eventType || 'all'}`}</div>
-        {
-          events.map((event, i) => {
-            return ( <Event event={event} /> )
-          })
-        }
+          <FormGroup>
+            <ControlLabel>Event Type</ControlLabel>
+            <FormControl type="text" name="eventType" placeholder={eventType || 'all'} onChange={this.handleChange.bind(this)} />
+          </FormGroup>
+          <Button type="submit">Fetch Events</Button>
+        </Form>
+        <p></p>
+        <Events events={events} />
       </div>
     );
   }

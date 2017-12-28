@@ -22,12 +22,12 @@ class Event extends React.Component {
     const actor = event.actor
 
     return (
-      <div>
-        <div>{`id: ${event.id}`}</div>
-        <div>{`type: ${event.type}`}</div>
-        <div><Actor actor={actor}/></div>
-        <div>{`created_at: ${event.created_at}`}</div>
-      </div>
+      <tr>
+        <td>{event.id}</td>
+        <td>{event.type}</td>
+        <td><Actor actor={actor}/></td>
+        <td>{event.created_at}</td>
+      </tr>
     );
   }
 }
