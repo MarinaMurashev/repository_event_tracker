@@ -1,6 +1,6 @@
 # Repository Event Tracker
 
-This is a Rails + React app that displays responses from the [Github Events API][https://developer.github.com/v3/activity/events/], allowing you to specify the user, repository, and event type you are interested in seeing.  For example, I can input user: marinamurashev, repo name: repository_event_tracker (pretty meta, I know), and event type: CreateEvent.
+This is a Rails + React app that displays responses from the [Github Events API](https://developer.github.com/v3/activity/events/), allowing you to specify the user, repository, and event type you are interested in seeing.  For example, I can input user: marinamurashev, repo name: repository_event_tracker (pretty meta, I know), and event type: CreateEvent.
 
 Please see the Github documentation for details about the api, including response limits, event types and rate limiting.
 
@@ -25,10 +25,12 @@ To run the app on your localhost (development environment), you will want to run
 
 ## Todo with more time
 
-* Setup better caching system, with memcached
+* Setup better caching system, like with memcached
 * Make requests to github taking into account the etags. In general, this needs to have a better way to not hit the rate limit
 * Introduce paginated results (i.e. 10 per page).
-* Make the UI nicer, including loading the avatar of the event's user, date formatting with moment, etc.
-* Clean up unnecessary gems/directories
+* Make the UI nicer, including loading the avatar of the event's user, date formatting with moment js, etc.
+* Clean up unnecessary or unused gems/directories
 * Load supported event types from the backend and make it a dropdown selector on the frontend.
-* Other ways to take advantage of React
+* Other ways to take advantage of React -- like parallel calling to and loading of results from the Github endpoint.
+* Get it production-ready, deploy
+* Create a Procfile to more simply run the app
