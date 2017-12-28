@@ -1,6 +1,6 @@
 module EventFetchers
   class Github
-    EVENTS_TTL = 60.seconds
+    EVENTS_TTL = 10.minutes
 
     def self.fetch(user:, repo_name:, event_type: nil)
       new(user: user, repo_name: repo_name, event_type: event_type).fetch

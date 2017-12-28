@@ -15,29 +15,20 @@ class RepoEventsDisplay extends React.Component {
   fetchEvents (user, repoName) {
     axios.get(`api/v1/repo_events?user=${user}&repo_name=${repoName}`)
       .then(response => {
-        this.setState({ events: response.data });
+        this.setState({ user: user, repoName: repoName, events: response.data });
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  setUser () {
-    this.setState({ user: this.props.defaultUser });
-  }
-
-  setRepoName () {
-    this.setState({ repoName: this.props.defaultRepoName });
-  }
-
   componentDidMount () {
-    this.setUser();
-    this.setRepoName();
+    this.setState({ repoName: this.props.defaultRepoName, user: this.props.defaultUser });
     this.fetchEvents(this.props.defaultUser, this.props.defaultRepoName);
   }
 
   handleChange (e) {
-    let newState = {};
+    let newState = { events: this.state.events, user: this.state.user, repoName: this.state.repoName };
 
     newState[e.target.name] = e.target.value;
 

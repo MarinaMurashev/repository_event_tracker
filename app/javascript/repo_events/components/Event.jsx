@@ -9,26 +9,23 @@ class Event extends React.Component {
     };
   }
 
-  setEvent () {
+  componentDidMount () {
     this.setState({ event: this.props.event });
   }
 
-  componentDidMount () {
-    this.setEvent();
-  }
-
   componentWillReceiveProps (nextProps) {
-    this.setEvent();
+    this.setState({ event: nextProps.event });
   }
 
   render () {
     const event = this.state.event
+    const actor = event.actor
 
     return (
       <div>
         <div>{`id: ${event.id}`}</div>
         <div>{`type: ${event.type}`}</div>
-        <div><Actor actor={event.actor}/></div>
+        <div><Actor actor={actor}/></div>
         <div>{`created_at: ${event.created_at}`}</div>
       </div>
     );

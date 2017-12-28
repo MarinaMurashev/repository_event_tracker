@@ -7,17 +7,12 @@ class Actor extends React.Component {
       actor: {}
     };
   }
-
-  setActor () {
+  componentDidMount () {
     this.setState({ actor: this.props.actor });
   }
 
-  componentDidMount () {
-    this.setActor();
-  }
-
   componentWillReceiveProps (nextProps) {
-    this.setActor();
+    this.setState({ actor: nextProps.actor });
   }
 
   render () {
@@ -27,11 +22,11 @@ class Actor extends React.Component {
       return (
         <div>
           <div>{`id: ${actor.id}`}</div>
-          <div>{`id: ${actor.login}`}</div>
-          <div>{`id: ${actor.display_login}`}</div>
-          <div>{`id: ${actor.gravatar_id}`}</div>
-          <div>{`id: ${actor.url}`}</div>
-          <div>{`id: ${actor.avatar_url}`}</div>
+          <div>{`login: ${actor.login}`}</div>
+          <div>{`display_login: ${actor.display_login}`}</div>
+          <div>{`gravatar_id: ${actor.gravatar_id}`}</div>
+          <div>{`actor_url: ${actor.url}`}</div>
+          <div>{`actor_avatar_url: ${actor.avatar_url}`}</div>
         </div>
       );
     } else {
